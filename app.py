@@ -111,7 +111,7 @@ def login():
 def dashboard():
     st.title("📊 Dashboard Admin Sentimen SAMSAT")
     if os.path.exists("data_komentar.csv"):
-        df = pd.read_csv("data_komentar.csv")  # Hapus argumen `names=[...]`
+        df = pd.read_csv("data_komentar.csv", on_bad_lines='skip')
 
         st.subheader("📺 Total Komentar per Platform")
         platform_counts = df["Sumber"].value_counts()
