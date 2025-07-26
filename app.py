@@ -2,13 +2,24 @@
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
-from wordcloud import WordCloud
-import datetime
-import os
 import nltk
+import os
+import csv
+import datetime
+from wordcloud import WordCloud
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 
 # Cek dan download lexicon NLTK
+# Fungsi simpan komentar
+def simpan_komentar(tanggal, nama, sumber, pelayanan, komentar, sentimen):
+    file_path = "data_komentar.csv"
+    if not os.path.exists(file_path):
+        with open(file_path, mode="w", newline="", encoding="utf-8") as file:
+            writer = csv.writer(file)
+            writer.writerow(["Tanggal", "Nama", "Sumber", "Pelayanan", "Komentar", "Sentimen"])
+    with open(file_path, mode="a", newline="", encoding="utf-8") as file:
+        writer = csv.writer(file)
+        writer.writerow([tanggal, nama, sumber, pelayanan, komentar, sentimen])
 def ensure_nltk_data():
     try:
         nltk.data.find("sentiment/vader_lexicon.zip")
@@ -100,7 +111,7 @@ def login():
 def dashboard():
     st.title("📊 Dashboard Admin Sentimen SAMSAT")
     if os.path.exists("data_komentar.csv"):
-        df = pd.read_csv("data_komentar.csv")
+        df = pd.read_csv("data_komentar.csv")  # Hapus argumen `names=[...]`
 
         st.subheader("📺 Total Komentar per Platform")
         platform_counts = df["Sumber"].value_counts()
